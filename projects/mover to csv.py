@@ -2,6 +2,7 @@
 # from one folder to another
 
 # Import pathlib
+import csv
 from pathlib import Path
 
 # Find the path to my Desktop
@@ -19,40 +20,51 @@ for file in current_location.iterdir():
     else:
          dict_files[file.suffix] += 1
 
-file_out = open("output.txt","a")
-file_out.write(f"{dict_files}") 
-file_out.write("\n")
-file_out.close()
 
-file_in = open("output.txt","r")
-content = file_in.read()
-content1=""
-for i in content:
-    if i == "{" or i=="'" or i == "\n":
-        continue
-    elif i == "}":
-        print(content.index(i))
-        print(len(content[-2]))
-        if content.index(i) == len(content[-2]):
-            print("bad")
-            break
-        else:
-            content1 += ","
-            print("good")
-    else:
-        content1 += i
+with open("filecounts.csv", "a") as csvfile:
+    countwriter = csv.writer(csvfile)
+    data = []
+    for file in dict_files:
+        data.append(dict_files[file])
+    countwriter.writerow(data)
+
+with open("filecounts.csv","r") as csvfile:
+    lines = csvfile.readline()
+    # reader = csv.DictReader(csvfile, fieldnames=["Folder", "CSV", "MD","PNG"])
+    # counts = list(reader)
+
+print(lines)
+
+# file_in = open("output.txt","r")
+# content = file_in.read()
+# content1=""
+# for i in content:
+#     if i == "{" or i=="'" or i == "\n":
+#         continue
+#     elif i == "}":
+#         content1 += ","
+#     else:
+#         content1 += i
 
    
-content1 = content1.split(",")
-dict1 = {}
-for i in content1:
-    dict1[i[:i.index(":")]]=int(i[i.index(":")+1:])
+# content1 = content1.split(",")
+# dict1 = {}
 
-print(dict1)
-print(content)
-print(content1)
+# for i in content1:
+#     dict1[i[:i.index(":")]]=i[i.index(":"):]
 
-file_in.close()
+# print(dict1)
+# print(content)
+# print(content1)
+
+# file_in.close()
+
+
+
+
+
+
+
 
 # for suffix in dict_files:
 #     if dict_files[suffix] > 5:
